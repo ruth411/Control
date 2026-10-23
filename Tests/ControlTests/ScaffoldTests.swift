@@ -15,6 +15,29 @@ final class ScaffoldTests: XCTestCase {
         XCTAssertEqual(metadata?["LSUIElement"] as? Bool, true)
     }
 
+    func testLaunchAtLoginUsesNativeServiceManagement() throws {
+        let packageRoot = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+        let source = try String(
+            contentsOf: packageRoot.appendingPathComponent("Sources/Control/ControlDelegate.swift"),
+            encoding: .utf8
+        )
+        let package = try String(
+            contentsOf: packageRoot.appendingPathComponent("Package.swift"),
+            encoding: .utf8
+        )
+
+        XCTAssertTrue(source.contains("import ServiceManagement"))
+        XCTAssertTrue(source.contains("SMAppService.mainApp"))
+        XCTAssertTrue(source.contains("try service.register()"))
+        XCTAssertTrue(source.contains("try service.unregister()"))
+        XCTAssertTrue(source.contains("Launch at Login"))
+        XCTAssertTrue(source.contains(".state"))
+        XCTAssertTrue(package.contains(".macOS(.v13)"))
+    }
+
     func testWheelOverlayUsesNonActivatingScreenLevelPresentation() throws {
         let packageRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
