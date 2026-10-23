@@ -2,3 +2,8 @@
 .swiftpm/
 build/
 .DS_Store
+
+# Local environment and agent instructions
+.env
+.env.*
+AGENTS.md
